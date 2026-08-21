@@ -1,5 +1,7 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import './App.css'
+import { AITemplate } from './modules/AITemplate.jsx'
+import { BasicExample, MultiMessageExample, ControlledExample } from './modules/StreamingExample.jsx';
 
 const initialTopics = [
   { id: 1, title: 'React 核心概念', detail: '组件、Props、State 与单向数据流', done: false },
@@ -8,6 +10,15 @@ const initialTopics = [
 ]
 
 function App() {
+  const [pathname, setPathname] = useState(window.location.pathname)
+
+  useEffect(() => {
+    const handlePopState = () => setPathname(window.location.pathname)
+    window.addEventListener('popstate', handlePopState)
+
+    return () => window.removeEventListener('popstate', handlePopState)
+  }, [])
+
   const [topics, setTopics] = useState(initialTopics)
   const [currentPage, setCurrentPage] = useState('home')
 
@@ -15,6 +26,10 @@ function App() {
     () => topics.filter((topic) => topic.done).length,
     [topics],
   )
+
+  if (pathname === '/modules/aitemplate') {
+    return <AITemplate />
+  }
 
   const toggleTopic = (id) => {
     setTopics((currentTopics) =>
@@ -53,11 +68,24 @@ function App() {
         <button
           className="page-link"
           type="button"
-          onClick={() => setCurrentPage('greeting')}
+          onClick={() => {
+            window.history.pushState({}, '', '/modules/aitemplate')
+            window.dispatchEvent(new PopStateEvent('popstate'))
+          }}
         >
-          打开问候子页面 →
+          打开 AI 模板 →
         </button>
       </header>
+
+       <section className="progress-card" aria-labelledby="progress-title">
+        <div>
+          <p className="card-label" id="progress-title">AI流式文本</p>
+        </div>
+        <div className="" aria-hidden="true">
+         <ControlledExample />
+         <MultiMessageExample />
+        </div>
+      </section>
 
       <section className="progress-card" aria-labelledby="progress-title">
         <div>

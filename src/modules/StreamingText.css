@@ -1,0 +1,53 @@
+/* StreamingText.css */
+.streaming-text-container {
+  padding: 20px;
+  background: #1e1e1e;
+  border-radius: 12px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+  min-height: 60px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.streaming-text-content {
+  color: #e0e0e0;
+  font-size: 16px;
+  line-height: 1.8;
+  white-space: pre-wrap;
+  word-break: break-word;
+  position: relative;
+}
+
+.cursor {
+  display: inline-block;
+  color: #4fc3f7;
+  font-weight: 300;
+  margin-left: 2px;
+  animation: none;
+}
+
+.cursor.blinking {
+  animation: blink 0.7s ease-in-out infinite;
+}
+
+@keyframes blink {
+  0%, 50% {
+    opacity: 1;
+  }
+  51%, 100% {
+    opacity: 0;
+  }
+}
+
+/* 响应式调整 */
+@media (max-width: 600px) {
+  .streaming-text-container {
+    padding: 15px;
+    border-radius: 8px;
+  }
+  
+  .streaming-text-content {
+    font-size: 14px;
+    line-height: 1.6;
+  }
+}
