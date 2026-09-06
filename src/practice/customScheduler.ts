@@ -49,7 +49,7 @@ async function testFunction(id: number, timeout: number) {
     }, timeout);
   });
 }
-async function main() {
+async function main2() {
   const testScheduler = new CustomScheduler(2);
   const taskList = [
     testScheduler.add(() => testFunction(1, 1000)),
@@ -59,4 +59,4 @@ async function main() {
   const res = await Promise.allSettled(taskList);
   console.log(JSON.stringify(res));
 }
-main();
+main2();

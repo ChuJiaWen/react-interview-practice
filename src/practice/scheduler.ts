@@ -1,6 +1,6 @@
 interface Task<T=any> {
     fn: () => Promise<T>;
-    resolve: (value:T)=>void;
+    resolve: (value?:T)=>void;
     reject: (reason?:any)=>void;
 }
 
