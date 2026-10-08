@@ -7,31 +7,37 @@ interface Task2<T> {
 class CustomScheduler {
   private maxCount: number;
   private queue: Task2<any>[] = [];
-  private runningCount: number = 0;
+  private processing: number = 0;
 
   constructor(maxCount: number) {
     this.maxCount = maxCount;
   }
 
   public add<T>(fn: () => Promise<T>) {
-   return new Promise((resolve, reject)=> {
-    this.queue.push({fn, resolve, reject});
-    this.__execute();
-   })
+    return new Promise((resolve, reject) => {
+      this.queue.push({ fn, resolve, reject });
+      this.__execute();
+    });
   }
 
-  private __execute(): void {
-    if (this.runningCount < this.maxCount && this.queue.length > 0) {
+  private __execute() {
+    if (this.queue.length > 0 && this.processing < this.maxCount) {
+      this.processing++;
       const task = this.queue.shift();
-      this.runningCount++;
-      task?.fn()
-      .then((value)=>task.resolve(value), (reason)=>task.reject(reason))
-      .finally(()=>{
-        this.runningCount--;
-        this.__execute();
-      }
-    )
-      
+      task
+        ?.fn()
+        .then(
+          (res) => {
+            task.resolve(res);
+          },
+          (reason) => {
+            task?.reject(reason);
+          },
+        )
+        .finally(() => {
+          this.processing--;
+          this.__execute();
+        });
     }
   }
 }
